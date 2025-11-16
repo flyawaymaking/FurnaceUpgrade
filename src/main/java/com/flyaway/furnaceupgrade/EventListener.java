@@ -3,6 +3,7 @@ package com.flyaway.furnaceupgrade;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,9 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class EventListener implements Listener {
     private final FurnaceUpgrade plugin;
@@ -49,24 +48,42 @@ public class EventListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.isCancelled()) return;
+
         Block block = event.getBlock();
         if (!isFurnace(block.getType())) return;
 
         Player player = event.getPlayer();
-        if (player.getGameMode() == GameMode.CREATIVE) {
-            return;
-        }
+        if (player.getGameMode() == GameMode.CREATIVE) return;
 
         FurnaceManager manager = plugin.getFurnaceManager();
         int level = manager.getFurnaceLevel(block);
         if (level < 0) return;
 
+        World world = block.getWorld();
+        Location loc = block.getLocation();
+
+        // Сохраняем оригинальные дропы и опыт
+        List<ItemStack> originalDrops = new ArrayList<>(block.getDrops());
+        int expToDrop = event.getExpToDrop();
+
+        // Отключаем стандартные дропы
         event.setDropItems(false);
+        event.setExpToDrop(0);
 
-        ItemStack drop = new ItemStack(block.getType());
-        manager.setFurnaceLevelToItem(drop, level);
+        // Дропаем кастомную печку
+        ItemStack furnaceDrop = new ItemStack(block.getType());
+        manager.setFurnaceLevelToItem(furnaceDrop, level);
+        world.dropItemNaturally(loc, furnaceDrop);
 
-        block.getWorld().dropItemNaturally(block.getLocation(), drop);
+        // Дропаем оригинальные предметы печки
+        for (ItemStack drop : originalDrops) {
+            world.dropItemNaturally(loc, drop);
+        }
+
+        // Дроп опыта
+        if (expToDrop > 0) {
+            world.spawn(loc, ExperienceOrb.class, orb -> orb.setExperience(expToDrop));
+        }
     }
 
     @EventHandler
@@ -80,7 +97,7 @@ public class EventListener implements Listener {
         double speedMultiplier = plugin.getUpgradeManager().getSpeedMultiplier(level);
 
         // Раз увеличиваем скорость переплавки, то для пропорциональности надо уменьшать время горения топлива
-        int newBurnTime = (int) (fuelMultiplier * event.getBurnTime() / speedMultiplier);
+        int newBurnTime = (int) Math.ceil(fuelMultiplier * event.getBurnTime() / speedMultiplier);
         event.setBurnTime(newBurnTime);
     }
 
