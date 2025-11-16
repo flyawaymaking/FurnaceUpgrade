@@ -1,0 +1,67 @@
+# Настройки экономики
+economy:
+  currency: "money" # Название валюты из CoinsEngine
+  base-cost: 10 # Стоимость первого уровня, если у уровня не задан cost
+  cost-multiplier: 1.5 # Во сколько раз увеличивается стоимость уровней, если не задан cost
+
+# Множители скорости и расхода топлива
+base-speed-multiplier: 1.0 # Базовый множитель скорость плавки
+speed-multiplier-per-level: 0.5 # Множитель скорость плавки
+base-fuel-consumption-multiplier: 1.0 # Базовый множитель затрат топлива
+fuel-consumption-multiplier-per-level: 0.25 # Множитель уменьшения затрат топлива за уровень
+
+# Визуальные эффекты
+visual:
+  upgrade-sound: "minecraft:entity.player.levelup"
+  upgrade-effect: "minecraft:happy_villager"
+
+# Улучшения
+upgrades:
+  0:
+    name: "<gray>Обычная</gray>"
+    cost: 0 # Этот уровень всегда бесплатен
+  1:
+    name: "<green>Улучшенная</green>"
+    cost: 100
+  2:
+    name: "<blue>Продвинутая</blue>"
+    cost: 250
+  3:
+    name: "<gold>Эпическая</gold>"
+    cost: 500
+  4:
+    name: "<dark_purple>Легендарная</dark_purple>"
+    cost: 1000
+
+# Префикс и названия печек
+prefix: "<gradient:blue:gray>[Улучшение Печи] |</gradient>"
+furnace-name: "Печь"
+blast-furnace-name: "Коптильня"
+smoker-name: "Коптильня"
+
+# Сообщения
+messages:
+  furnace-level-display: "<gray>{furnace} [{level-name}]"
+  upgrade-successful: "<green>{furnace} улучшена до уровня: {level} ({level-name})"
+  max-level-reached: "<red>Достигнут максимальный уровень улучшения!"
+  not-enough-money: "<red>Недостаточно денег для улучшения! Нужно: {cost}"
+  no-permission: "<red>Недостаточно прав!"
+  reload-successful: "<green>Конфигурация перезагружена!"
+  only-player: "<red>Эта команда только для игроков!"
+  economy-disable: "<red>Система экономики недоступна! Валюта {currency} не найдена."
+  help: |
+    <gold>=== FurnaceUpgrade ===
+    <yellow>/furnaceuprgade reload - Перезагрузить конфиг
+    <yellow>/furnaceuprgade info - Информация об улучшениях
+  upgrade-title: "<gold>=== Улучшение печки ==="
+  upgrade-possible: "<gold>Эту {furnace} можно улучшить до:"
+  item-level-lore: |
+    <yellow>Уровень {level} ({level-name}):
+    <green>Скорость переплавки: x{speed}
+    <aqua>Топливо эффективнее: x{fuel}
+  upgrade-level: |
+    <yellow>Уровень {level} ({level-name}):
+    <green> | Скорость переплавки: x{speed}
+    <aqua> | Топливо эффективнее: x{fuel}
+    <gold> | Цена Улучшения: {price}
+  click-again-to-upgrade: "<yellow> >> Нажмите SHIFT+ПКМ еще раз в течение 5 секунд для улучшения</yellow>"

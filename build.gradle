@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.flyaway.furnaceupgrade'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "papermc"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+    maven { url = 'https://repo.nightexpressdev.com/releases'}
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT'
+    compileOnly 'su.nightexpress.coinsengine:CoinsEngine:2.5.0'
+}
+
+tasks.jar {
+    archiveBaseName.set("FurnaceUpgrade")
+}

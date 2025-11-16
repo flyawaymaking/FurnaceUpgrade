@@ -1,0 +1,19 @@
+name: FurnaceUpgrade
+main: com.flyaway.furnaceupgrade.FurnaceUpgrade
+version: 1.0.0
+api-version: "1.21"
+description: Плагин для прокачки печек за валюту CoinsEngine
+author: FlyAwayMaking
+website: https://github.com/flyawaymaking
+depend:
+  - CoinsEngine
+
+commands:
+  furnaceupgrade:
+    description: Основная команда FurnaceUpgrade
+    usage: /<command> [reload|info]
+
+permissions:
+  furnaceupgrade.reload:
+    description: Право на перезагрузку конфига
+    default: op
