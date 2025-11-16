@@ -5,8 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Locale;
-
 public final class FurnaceUpgrade extends JavaPlugin {
     private FurnaceManager furnaceManager;
     private EconomyManager economyManager;

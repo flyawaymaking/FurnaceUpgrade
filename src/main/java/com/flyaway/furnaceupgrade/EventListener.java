@@ -80,7 +80,7 @@ public class EventListener implements Listener {
         double speedMultiplier = plugin.getUpgradeManager().getSpeedMultiplier(level);
 
         // Раз увеличиваем скорость переплавки, то для пропорциональности надо уменьшать время горения топлива
-        int newBurnTime = (int) (fuelMultiplier * event.getBurnTime() / speedMultiplier);
+        int newBurnTime = (int) Math.ceil(fuelMultiplier * event.getBurnTime() / speedMultiplier);
         event.setBurnTime(newBurnTime);
     }
 

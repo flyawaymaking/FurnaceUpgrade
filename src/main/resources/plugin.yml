@@ -1,6 +1,6 @@
 name: FurnaceUpgrade
 main: com.flyaway.furnaceupgrade.FurnaceUpgrade
-version: 1.0.0
+version: 1.0.1
 api-version: "1.21"
 description: Плагин для прокачки печек за валюту CoinsEngine
 author: FlyAwayMaking
