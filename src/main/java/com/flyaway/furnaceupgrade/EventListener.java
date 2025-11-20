@@ -10,10 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 import java.util.*;
 
@@ -24,6 +27,36 @@ public class EventListener implements Listener {
 
     public EventListener(FurnaceUpgrade plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onPrepareCraft(PrepareItemCraftEvent event) {
+        CraftingInventory inventory = event.getInventory();
+        Recipe recipe = event.getRecipe();
+
+        if (recipe == null) return;
+
+        ItemStack result = recipe.getResult();
+        if (result.getType() != Material.BLAST_FURNACE && result.getType() != Material.SMOKER) return;
+
+        FurnaceManager furnaceManager = plugin.getFurnaceManager();
+
+        int maxLevel = 0;
+
+        for (ItemStack ingredient : inventory.getMatrix()) {
+            if (ingredient != null && ingredient.getType() == Material.FURNACE) {
+                int level = furnaceManager.getFurnaceLevelFromItem(ingredient);
+                if (level > maxLevel) {
+                    maxLevel = level;
+                }
+            }
+        }
+
+        if (maxLevel > 0) {
+            ItemStack upgraded = result.clone();
+            furnaceManager.setFurnaceLevelToItem(upgraded, maxLevel);
+            inventory.setResult(upgraded);
+        }
     }
 
     @EventHandler
