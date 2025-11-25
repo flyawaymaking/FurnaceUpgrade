@@ -2,6 +2,7 @@ package com.flyaway.furnaceupgrade;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
@@ -95,25 +96,30 @@ public class EventListener implements Listener {
         World world = block.getWorld();
         Location loc = block.getLocation();
 
-        // Сохраняем оригинальные дропы и опыт
-        List<ItemStack> originalDrops = new ArrayList<>(block.getDrops());
+        BlockState state = block.getState();
+        if (!(state instanceof Furnace furnace)) return;
+
+        ItemStack[] furnaceContents = {
+                furnace.getSnapshotInventory().getItem(0), // Сырье
+                furnace.getSnapshotInventory().getItem(1), // Топливо
+                furnace.getSnapshotInventory().getItem(2)  // Результат
+        };
+
         int expToDrop = event.getExpToDrop();
 
-        // Отключаем стандартные дропы
         event.setDropItems(false);
         event.setExpToDrop(0);
 
-        // Дропаем кастомную печку
         ItemStack furnaceDrop = new ItemStack(block.getType());
         manager.setFurnaceLevelToItem(furnaceDrop, level);
         world.dropItemNaturally(loc, furnaceDrop);
 
-        // Дропаем оригинальные предметы печки
-        for (ItemStack drop : originalDrops) {
-            world.dropItemNaturally(loc, drop);
+        for (ItemStack item : furnaceContents) {
+            if (item != null && !item.getType().isAir()) {
+                world.dropItemNaturally(loc, item);
+            }
         }
 
-        // Дроп опыта
         if (expToDrop > 0) {
             world.spawn(loc, ExperienceOrb.class, orb -> orb.setExperience(expToDrop));
         }
