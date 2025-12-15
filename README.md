@@ -65,7 +65,7 @@ upgrades:
 # Префикс и названия печек
 prefix: "<gradient:blue:gray>[Улучшение Печи] |</gradient>"
 furnace-name: "Печь"
-blast-furnace-name: "Коптильня"
+blast-furnace-name: "Плавильня"
 smoker-name: "Коптильня"
 
 # Сообщения
