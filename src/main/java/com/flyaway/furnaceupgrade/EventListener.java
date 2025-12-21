@@ -94,7 +94,7 @@ public class EventListener implements Listener {
         if (level < 0) return;
 
         World world = block.getWorld();
-        Location loc = block.getLocation();
+        Location centerLoc = block.getLocation().add(0.5, 0.5, 0.5);
 
         BlockState state = block.getState();
         if (!(state instanceof Furnace furnace)) return;
@@ -112,16 +112,16 @@ public class EventListener implements Listener {
 
         ItemStack furnaceDrop = new ItemStack(block.getType());
         manager.setFurnaceLevelToItem(furnaceDrop, level);
-        world.dropItemNaturally(loc, furnaceDrop);
+        world.dropItemNaturally(centerLoc, furnaceDrop);
 
         for (ItemStack item : furnaceContents) {
             if (item != null && !item.getType().isAir()) {
-                world.dropItemNaturally(loc, item);
+                world.dropItemNaturally(centerLoc, item);
             }
         }
 
         if (expToDrop > 0) {
-            world.spawn(loc, ExperienceOrb.class, orb -> orb.setExperience(expToDrop));
+            world.spawn(centerLoc, ExperienceOrb.class, orb -> orb.setExperience(expToDrop));
         }
     }
 
