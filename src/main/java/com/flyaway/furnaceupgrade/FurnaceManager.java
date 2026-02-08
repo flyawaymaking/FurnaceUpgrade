@@ -92,7 +92,6 @@ public class FurnaceManager {
 
             meta.lore(lore);
         } else {
-            // Если уровень 0, удаляем данные (обычная печка)
             data.remove(furnaceLevelKey);
             meta.lore(null);
             meta.displayName(null);

@@ -11,24 +11,22 @@ public class EconomyManager {
 
     public EconomyManager(FurnaceUpgrade plugin) {
         this.plugin = plugin;
-        // Получаем имя валюты из конфига
         this.currencyName = plugin.getConfig().getString("economy.currency", "money");
-        ;
         this.currency = CoinsEngineAPI.getCurrency(currencyName);
 
-        if (this.currency == null) {
-            plugin.getLogger().warning("Валюта '" + currencyName + "' не найдена в CoinsEngine!");
-        } else {
+        if (isEconomyAvailable()) {
             plugin.getLogger().info("Успешно подключена валюта: " + currency.getName());
+        } else {
+            plugin.getLogger().warning("Валюта '" + currencyName + "' не найдена в CoinsEngine!");
         }
     }
 
     public String getCurrencyName() {
-        return currency != null ? currency.getName() : currencyName;
+        return isEconomyAvailable() ? currency.getName() : currencyName;
     }
 
     public boolean hasEnoughMoney(Player player, double amount) {
-        if (currency == null) {
+        if (!isEconomyAvailable()) {
             plugin.sendMessage(player, plugin.getMessage("economy-disable").replace("{currency}", currencyName));
             return false;
         }
@@ -43,18 +41,16 @@ public class EconomyManager {
     }
 
     public boolean withdrawMoney(Player player, double amount) {
-        if (currency == null) {
+        if (!isEconomyAvailable()) {
             plugin.sendMessage(player, plugin.getMessage("economy-disable").replace("{currency}", currencyName));
             return false;
         }
 
         try {
-            // Проверяем, что у игрока достаточно денег
             if (!hasEnoughMoney(player, amount)) {
                 return false;
             }
 
-            // Списание денег через CoinsEngine
             CoinsEngineAPI.removeBalance(player, currency, amount);
             return true;
         } catch (Exception e) {
@@ -70,7 +66,7 @@ public class EconomyManager {
     }
 
     public String getCurrencySymbol() {
-        return currency != null ? currency.getSymbol() : "";
+        return isEconomyAvailable() ? currency.getSymbol() : "";
     }
 
     public boolean isEconomyAvailable() {

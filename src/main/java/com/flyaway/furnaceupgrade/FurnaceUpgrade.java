@@ -13,16 +13,13 @@ public final class FurnaceUpgrade extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Сохраняем конфиг по умолчанию
         this.saveDefaultConfig();
 
-        // Инициализируем менеджеры
         this.furnaceManager = new FurnaceManager(this);
         this.economyManager = new EconomyManager(this);
         this.upgradeManager = new UpgradeManager(this);
         CommandHandler commandHandler = new CommandHandler(this);
 
-        // Регистрируем события и команды
         getCommand("furnaceupgrade").setExecutor(commandHandler);
         getCommand("furnaceupgrade").setTabCompleter(commandHandler);
         getServer().getPluginManager().registerEvents(new EventListener(this), this);
@@ -35,7 +32,6 @@ public final class FurnaceUpgrade extends JavaPlugin {
         getLogger().info("FurnaceUpgrade выключен!");
     }
 
-    // Геттеры для менеджеров
     public FurnaceManager getFurnaceManager() {
         return furnaceManager;
     }

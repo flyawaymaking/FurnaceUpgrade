@@ -84,7 +84,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             if (info != null) {
                 double speed = upgradeManager.getSpeedMultiplier(i);
                 double fuel = upgradeManager.getFuelMultiplier(i);
-                String price = i < upgradeManager.getMaxLevel() ? info.getCost() + currencySymbol : "Max";
+                String price = info.getCost() + currencySymbol;
                 message.append("\n").append(plugin.getMessage("upgrade-level")
                         .replace("{level}", String.valueOf(i))
                         .replace("{level-name}", info.getName())

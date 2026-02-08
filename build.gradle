@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.flyaway.furnaceupgrade'
-version = '1.2.2'
+version = '1.2.3'
 
 java {
     toolchain {
@@ -27,4 +27,14 @@ dependencies {
 
 tasks.jar {
     archiveBaseName.set("FurnaceUpgrade")
+}
+
+tasks.processResources {
+    filesMatching("plugin.yml") {
+        expand(
+                version: project.version,
+                name: project.name,
+                group: project.group
+        )
+    }
 }

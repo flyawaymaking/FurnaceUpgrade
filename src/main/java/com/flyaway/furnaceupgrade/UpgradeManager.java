@@ -16,7 +16,7 @@ public class UpgradeManager {
         ConfigurationSection levelSection = upgradesSection.getConfigurationSection(String.valueOf(level));
         if (levelSection == null) return null;
 
-        String name = levelSection.getString("name");
+        String name = levelSection.getString("name", "null");
         int cost = levelSection.getInt("cost", plugin.getEconomyManager().getUpgradeCost(level));
 
         return new UpgradeInfo(name, cost);

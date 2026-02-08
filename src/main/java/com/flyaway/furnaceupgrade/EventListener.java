@@ -161,7 +161,6 @@ public class EventListener implements Listener {
         long lastTime = lastClickTime.getOrDefault(playerId, 0L);
         Block lastBlock = lastClickedBlock.get(playerId);
 
-        // Проверяем двойное нажатие в течение 5 секунд на тот же блок
         if (lastBlock != null && lastBlock.equals(block) && (currentTime - lastTime) < 5000) {
             // Второе нажатие - улучшение
             attemptUpgrade(player, block);
@@ -173,7 +172,6 @@ public class EventListener implements Listener {
             lastClickTime.put(playerId, currentTime);
             lastClickedBlock.put(playerId, block);
 
-            // Очищаем через 5 секунд
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (lastClickedBlock.get(playerId) == block &&
                         lastClickTime.getOrDefault(playerId, 0L) == currentTime) {
@@ -203,17 +201,16 @@ public class EventListener implements Listener {
         String currencySymbol = plugin.getEconomyManager().getCurrencySymbol();
         String furnaceName = plugin.getFurnaceName(block.getType());
 
-        StringBuilder upgradeMessage = new StringBuilder(plugin.getMessage("upgrade-possible"));
-        upgradeMessage.append("\n").append(plugin.getMessage("upgrade-level")
-                        .replace("{furnace}", furnaceName)
-                        .replace("{level}", String.valueOf(currentLevel + 1))
-                        .replace("{level-name}", nextUpgrade.getName())
-                        .replace("{speed}", String.format("%.2f", speed))
-                        .replace("{fuel}", String.format("%.2f", fuel))
-                        .replace("{price}", nextUpgrade.getCost() + currencySymbol))
-                .append("\n").append(plugin.getMessage("click-again-to-upgrade"));
+        String upgradeMessage = plugin.getMessage("upgrade-possible") + "\n" + plugin.getMessage("upgrade-level") +
+                "\n" + plugin.getMessage("click-again-to-upgrade");
+        upgradeMessage = upgradeMessage.replace("{furnace}", furnaceName)
+                .replace("{level}", String.valueOf(currentLevel + 1))
+                .replace("{level-name}", nextUpgrade.getName())
+                .replace("{speed}", String.format("%.2f", speed))
+                .replace("{fuel}", String.format("%.2f", fuel))
+                .replace("{price}", nextUpgrade.getCost() + currencySymbol);
 
-        plugin.sendMessage(player, upgradeMessage.toString());
+        plugin.sendMessage(player, upgradeMessage);
     }
 
     private void attemptUpgrade(Player player, Block block) {
