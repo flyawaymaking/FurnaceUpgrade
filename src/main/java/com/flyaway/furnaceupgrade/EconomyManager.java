@@ -1,28 +1,36 @@
 package com.flyaway.furnaceupgrade;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import su.nightexpress.coinsengine.api.CoinsEngineAPI;
-import su.nightexpress.coinsengine.api.currency.Currency;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import su.nightexpress.excellenteconomy.api.ExcellentEconomyAPI;
+import su.nightexpress.excellenteconomy.api.currency.ExcellentCurrency;
 
 public class EconomyManager {
     private final FurnaceUpgrade plugin;
-    private final String currencyName;
-    private Currency currency;
+    private String currencyName;
+    private ExcellentCurrency currency;
+    private ExcellentEconomyAPI api;
 
     public EconomyManager(FurnaceUpgrade plugin) {
         this.plugin = plugin;
+        loadApi();
+    }
+
+    private void loadApi() {
         this.currencyName = plugin.getConfig().getString("economy.currency", "money");
-        this.currency = CoinsEngineAPI.getCurrency(currencyName);
+
+        RegisteredServiceProvider<ExcellentEconomyAPI> provider = Bukkit.getServer().getServicesManager().getRegistration(ExcellentEconomyAPI.class);
+        if (provider != null) {
+            this.api = provider.getProvider();
+            this.currency = api.getCurrency(currencyName);
+        }
 
         if (isEconomyAvailable()) {
             plugin.getLogger().info("Успешно подключена валюта: " + currency.getName());
         } else {
-            plugin.getLogger().warning("Валюта '" + currencyName + "' не найдена в CoinsEngine!");
+            plugin.getLogger().warning("Валюта '" + currencyName + "' не найдена в ExcellentEconomy!");
         }
-    }
-
-    public String getCurrencyName() {
-        return isEconomyAvailable() ? currency.getName() : currencyName;
     }
 
     public boolean hasEnoughMoney(Player player, double amount) {
@@ -32,7 +40,7 @@ public class EconomyManager {
         }
 
         try {
-            double balance = CoinsEngineAPI.getBalance(player, currency);
+            double balance = api.getBalance(player, currency);
             return balance >= amount;
         } catch (Exception e) {
             plugin.getLogger().warning("Ошибка при проверке баланса: " + e.getMessage());
@@ -51,7 +59,7 @@ public class EconomyManager {
                 return false;
             }
 
-            CoinsEngineAPI.removeBalance(player, currency, amount);
+            api.withdraw(player, currency, amount);
             return true;
         } catch (Exception e) {
             plugin.getLogger().warning("Ошибка при списании денег: " + e.getMessage());
@@ -74,6 +82,6 @@ public class EconomyManager {
     }
 
     public void reload() {
-        this.currency = CoinsEngineAPI.getCurrency(currencyName);
+        loadApi();
     }
 }

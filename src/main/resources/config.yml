@@ -1,6 +1,6 @@
 # Настройки экономики
 economy:
-  currency: "money" # Название валюты из CoinsEngine
+  currency: "money" # Название валюты из ExcellentEconomy
   base-cost: 10 # Стоимость первого уровня, если у уровня не задан cost
   cost-multiplier: 1.5 # Во сколько раз увеличивается стоимость уровней, если не задан cost
 
