@@ -1,5 +1,8 @@
 # FurnaceUpgrade - Плагин для улучшения печек
 
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/furnanceupgrade?logo=modrinth&label=downloads&color=1bd96a)](https://modrinth.com/plugin/furnanceupgrade)
+[![Modrinth Followers](https://img.shields.io/modrinth/followers/furnanceupgrade?logo=modrinth&label=followers&color=1bd96a)](https://modrinth.com/plugin/furnanceupgrade)
+
 Плагин для серверов Minecraft на Paper, который позволяет улучшать печки за внутриигровую валюту через ExcellentEconomy.
 
 | **Версия плагина** | **Поддерживаемые Paper** | **Java** | **Зависимость**  |
